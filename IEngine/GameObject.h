@@ -29,14 +29,14 @@ namespace IEngine
 			return buffer.str();
 		}
 
-		GameObject() 
+		GameObject(const char* shader = "Engine/Rendering/Shaders/DefaultFragmentShader.glsl")
 		{
 			// Initiate material
 			unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
 			unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
 			std::string vertSrc = ReadTextFile("Engine/Rendering/Shaders/DefaultVertexShader.glsl");
-			std::string fragSrc = ReadTextFile("Engine/Rendering/Shaders/DefaultFragmentShader.glsl");
+			std::string fragSrc = ReadTextFile(shader);
 			const char* vSrc = vertSrc.c_str();
 			const char* fSrc = fragSrc.c_str();
 

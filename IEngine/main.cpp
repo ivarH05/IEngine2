@@ -44,15 +44,23 @@ int main()
     }
 
     glViewport(0, 0, 800, 600);
-	GameObject object = GameObject();
+    GameObject object = GameObject();
+    GameObject object2 = GameObject("Engine/Rendering/Shaders/ExampleFragmentShader.glsl");
 
     while (!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
 
         glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-		object.OnRender();
+        glClearDepth(0.0f);
+        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_GREATER);
+        glDepthMask(GL_TRUE);
+
+        object.OnRender();
+        object2.OnRender();
         glfwSwapBuffers(window);
 
         float moveSpeed = 0.01f;
@@ -63,6 +71,9 @@ int main()
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) object.position.y -= moveSpeed;
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) object.position.x -= moveSpeed;
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) object.position.x += moveSpeed;
+
+        if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) object.position.z -= moveSpeed;
+        if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) object.position.z += moveSpeed;
 
         if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) object.scale.x += scaleSpeed;
         if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) object.scale.x -= scaleSpeed;
