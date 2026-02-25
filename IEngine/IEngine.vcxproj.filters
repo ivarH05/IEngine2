@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="External\glad\src\glad.c">
+      <Filter>External</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Vector3.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Core">
+      <UniqueIdentifier>{7a828044-fa5a-4942-8f8a-8a5fc183d73e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{88331025-9262-4ec5-bce2-b2f9865a164b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{8533b2f1-a325-4983-ae7f-913b16720dbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{91fcb41b-1b70-4f13-953f-987cdb609b66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Rendering">
+      <UniqueIdentifier>{d3ab57de-fb99-4afa-95a1-56aac974df17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Rendering\Shaders">
+      <UniqueIdentifier>{fda08878-8f06-40c5-a5f8-687113df7c7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External">
+      <UniqueIdentifier>{b7f060a9-5f75-4684-96f0-25501411e6b7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Engine\Rendering\Shaders\DefaultFragmentShader.glsl">
+      <Filter>Engine\Rendering\Shaders</Filter>
+    </None>
+    <None Include="Engine\Rendering\Shaders\DefaultVertexShader.glsl">
+      <Filter>Engine\Rendering\Shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>

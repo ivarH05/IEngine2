@@ -1,8 +1,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include "GameObject.h"
+using namespace IEngine;
 
-const char* vertexShaderSource = R"(
+const char* defaultVertexShader = R"(
 #version 330 core
 layout (location = 0) in vec3 aPos;
 void main()
@@ -11,12 +13,12 @@ void main()
 }
 )";
 
-const char* fragmentShaderSource = R"(
+const char* defaultFragmentShader = R"(
 #version 330 core
 out vec4 FragColor;
 void main()
 {
-    FragColor = vec4(1.0, 0.5, 0.2, 1.0);
+    FragColor = vec4(1.0, 0.0, 1.0, 1.0);
 }
 )";
 
@@ -42,53 +44,49 @@ int main()
     }
 
     glViewport(0, 0, 800, 600);
-
-    float vertices[] = {
-        -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-         0.0f,  0.5f, 0.0f
-    };
-
-    unsigned int VBO, VAO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-
-    unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-
-    unsigned int shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    GameObject object = GameObject();
+    GameObject object2 = GameObject("Engine/Rendering/Shaders/ExampleFragmentShader.glsl");
 
     while (!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
 
         glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClearDepth(0.0f);
+        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-        glUseProgram(shaderProgram);
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_GREATER);
+        glDepthMask(GL_TRUE);
 
+        object.OnRender();
+        object2.OnRender();
         glfwSwapBuffers(window);
+
+        float moveSpeed = 0.01f;
+        float scaleSpeed = 0.01f;
+        float rotSpeed = 0.02f;
+
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) object.position.y += moveSpeed;
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) object.position.y -= moveSpeed;
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) object.position.x -= moveSpeed;
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) object.position.x += moveSpeed;
+
+        if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) object.position.z -= moveSpeed;
+        if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) object.position.z += moveSpeed;
+
+        if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) object.scale.x += scaleSpeed;
+        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) object.scale.x -= scaleSpeed;
+        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) object.scale.y += scaleSpeed;
+        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) object.scale.y -= scaleSpeed;
+
+        if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) object.rotation.z += rotSpeed;
+        if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) object.rotation.z -= rotSpeed;
+        if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) object.rotation.x += rotSpeed;
+        if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) object.rotation.x -= rotSpeed;
+        if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) object.rotation.y += rotSpeed;
+        if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) object.rotation.y -= rotSpeed;
+
     }
 
     glfwTerminate();
