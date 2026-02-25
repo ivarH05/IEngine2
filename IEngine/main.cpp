@@ -44,25 +44,7 @@ int main()
     }
 
     glViewport(0, 0, 800, 600);
-
-
-    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &defaultVertexShader, NULL);
-    glCompileShader(vertexShader);
-
-    unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &defaultFragmentShader, NULL);
-    glCompileShader(fragmentShader);
-
-    unsigned int defaultShaderProgram = glCreateProgram();
-    glAttachShader(defaultShaderProgram, vertexShader);
-    glAttachShader(defaultShaderProgram, fragmentShader);
-    glLinkProgram(defaultShaderProgram);
-
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-	GameObject object = GameObject(defaultShaderProgram);
+	GameObject object = GameObject();
 
     while (!glfwWindowShouldClose(window))
     {

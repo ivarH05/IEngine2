@@ -2,70 +2,15 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
 #include "Vector3.h"
 
 namespace IEngine
 {
 	class GameObject
 	{
-	private:const char* vertexShaderSource = R"(
-		#version 330 core
-		layout (location = 0) in vec3 aPos;
-
-		uniform vec3 position;
-		uniform vec3 rotation;   // Euler angles in radians (x, y, z)
-		uniform vec3 scale;
-
-		void main()
-		{
-			vec3 pos = aPos;
-
-			// Scale
-			pos *= scale;
-
-			// Rotation around X
-			float cx = cos(rotation.x);
-			float sx = sin(rotation.x);
-			pos = vec3(
-				pos.x,
-				pos.y * cx - pos.z * sx,
-				pos.y * sx + pos.z * cx
-			);
-
-			// Rotation around Y
-			float cy = cos(rotation.y);
-			float sy = sin(rotation.y);
-			pos = vec3(
-				pos.x * cy + pos.z * sy,
-				pos.y,
-				-pos.x * sy + pos.z * cy
-			);
-
-			// Rotation around Z
-			float cz = cos(rotation.z);
-			float sz = sin(rotation.z);
-			pos = vec3(
-				pos.x * cz - pos.y * sz,
-				pos.x * sz + pos.y * cz,
-				pos.z
-			);
-
-			// Translation
-			pos += position;
-
-			gl_Position = vec4(pos, 1.0);
-		}
-		)";
-
-		const char* fragmentShaderSource = R"(
-		#version 330 core
-		out vec4 FragColor;
-		void main()
-		{
-			FragColor = vec4(1.0, 1.0, 0.0, 1.0);
-		}
-		)";
-
 	public:
 		Vector3 position;
 		Vector3 rotation;
@@ -76,22 +21,38 @@ namespace IEngine
 		int rotationLoc;
 		int scaleLoc;
 
-		GameObject(unsigned int defaultShader) 
+		static std::string ReadTextFile(const char* path)
+		{
+			std::ifstream file(path);
+			std::stringstream buffer;
+			buffer << file.rdbuf();
+			return buffer.str();
+		}
+
+		GameObject() 
 		{
 			// Initiate material
-			shaderProgram = defaultShader;
 			unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-			glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+			unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+
+			std::string vertSrc = ReadTextFile("Engine/Rendering/Shaders/DefaultVertexShader.glsl");
+			std::string fragSrc = ReadTextFile("Engine/Rendering/Shaders/DefaultFragmentShader.glsl");
+			const char* vSrc = vertSrc.c_str();
+			const char* fSrc = fragSrc.c_str();
+
+			glShaderSource(vertexShader, 1, &vSrc, NULL);
 			glCompileShader(vertexShader);
 
-			unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-			glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+			glShaderSource(fragmentShader, 1, &fSrc, NULL);
 			glCompileShader(fragmentShader);
 
 			shaderProgram = glCreateProgram();
 			glAttachShader(shaderProgram, vertexShader);
 			glAttachShader(shaderProgram, fragmentShader);
 			glLinkProgram(shaderProgram);
+
+			glDeleteShader(vertexShader);
+			glDeleteShader(fragmentShader);
 
 			positionLoc = glGetUniformLocation(shaderProgram, "position");
 			rotationLoc = glGetUniformLocation(shaderProgram, "rotation");
