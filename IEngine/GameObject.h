@@ -1,15 +1,15 @@
 #pragma once
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
 #include "Vector3.h"
+#include "Object.h"
 
 namespace IEngine
 {
-	class GameObject
+	class GameObject : public Object
 	{
 	public:
 		Vector3 position;
@@ -29,9 +29,9 @@ namespace IEngine
 			return buffer.str();
 		}
 
-		GameObject(const char* shader = "Engine/Rendering/Shaders/DefaultFragmentShader.glsl")
+		void instantiate(const char* shader = "Engine/Rendering/Shaders/DefaultFragmentShader.glsl")
 		{
-			// Initiate material
+			// Initiate materiald
 			unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
 			unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
