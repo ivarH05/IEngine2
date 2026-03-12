@@ -17,12 +17,11 @@ private:
 	friend Object;
 
 	PointerControlBlock(T* object);
+	~PointerControlBlock();
 
 	void Disassemble();
 	void AddLink();
 	void RemoveLink();
-
-	T* Get() const;
 
 	T* _target = nullptr;
 	int _linkCount = 0;

@@ -27,8 +27,10 @@ public:
 
 	static Pointer<T> Create();
 
+	explicit operator bool() const;
+
 	T* operator->() const;
-	T* Get() const;
+	inline T* Get() const;
 
 	bool operator==(const Pointer<T>& other) noexcept;
 	bool operator!=(const Pointer<T>& other) noexcept;
@@ -43,6 +45,13 @@ public:
 
 private:
 	PointerControlBlock<T>* _controlBlock = nullptr;
+
+	inline bool ControlBlockExists();
+	inline bool TargetExists();
+	inline void LinkControlBlock();
+	inline void UnlinkControlBlock();
+	inline void SetControlBlock(PointerControlBlock<T>* newBlock);
+
 };
 
 #include "Pointer.inl"

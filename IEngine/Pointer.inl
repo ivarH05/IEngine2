@@ -2,14 +2,28 @@
 #include "PointerControlBlock.h"
 #include "Object.h"
 
+// Constructor base
+template <typename T>
+Pointer<T>::Pointer()
+{
+	static_assert(!std::is_abstract<T>::value, "Type cannot be abstract");
+	static_assert(std::is_base_of_v<Object, T>, "T must inherit from Object");
+}
+
+// Constructor with instant assignment
+template <typename T>
+Pointer<T>::Pointer(T* other)
+{
+	static_assert(std::is_base_of_v<Object, T>, "T must inherit from Object");
+	_controlBlock = reinterpret_cast<PointerControlBlock<T>*>(other->_controlBlock);
+	_controlBlock->AddLink();
+}
+
 // Copy Constructor
 template <typename T>
 Pointer<T>::Pointer<T>(const Pointer<T>& other) : _controlBlock(other._controlBlock)
 {
-	if (_controlBlock == nullptr)
-		return;
-
-	_controlBlock->AddLink();
+	LinkControlBlock();
 }
 
 // Move Constructor
@@ -23,22 +37,14 @@ Pointer<T>::Pointer<T>(Pointer<T>&& other) : _controlBlock(other._controlBlock)
 template <typename T>
 Pointer<T>::~Pointer<T>()
 {
-	if (_controlBlock == nullptr)
-		return;
-
-	_controlBlock->RemoveLink();
+	UnlinkControlBlock();
 }
 
 // Copy
 template <typename T> 
 Pointer<T>& Pointer<T>::operator=(const Pointer<T>& other) noexcept
 {
-	_controlBlock = other._controlBlock;
-
-	if (_controlBlock == nullptr)
-		return;
-
-	_controlBlock->AddLink();
+	SetControlBlock(other._controlBlock);
 	return *this;
 }
 
@@ -51,33 +57,20 @@ Pointer<T>& Pointer<T>::operator=(Pointer<T>&& other) noexcept
 	return *this;
 }
 
-
 // Dereference
 template<typename T>
 T* Pointer<T>::operator->() const
 {
-	return _controlBlock->Get();
-}
-
-// Constructor
-template <typename T>
-Pointer<T>::Pointer()
-{
-	static_assert(!std::is_abstract<T>::value, "Type cannot be abstract");
-	static_assert(std::is_base_of_v<Object, T>, "T must inherit from Object");
+	return _controlBlock->_target;
 }
 
 template <typename T>
 std::string Pointer<T>::ToString() const
 {
-	std::ostringstream result;
-
-	if (_controlBlock && _controlBlock->object)
-		result << "Pointer, references: " << _controlBlock->ref_count << ", Object: " << _controlBlock->object;
+	if (TargetExists())
+		return "Pointer, references: " << _controlBlock->ref_count << ", Object: " << _controlBlock->_target;
 	else
-		result << "Pointer, NULL";
-
-	return result.str();
+		return "Pointer, NULL";
 }
 
 // Compare to other pointers
@@ -97,26 +90,26 @@ bool Pointer<T>::operator!=(const Pointer<T>& other) noexcept
 template <typename T>
 bool Pointer<T>::operator==(const T* other) noexcept
 {
-	return _controlBlock->Get() == other;
+	return ControlBlockExists() && Get() == other;
 }
 
 template <typename T>
 bool Pointer<T>::operator!=(const T* other) noexcept
 {
-	return _controlBlock->Get() != other;
+	return ControlBlockExists() && Get() != other;
 }
 
 // Compare to null pointer
 template <typename T>
 bool Pointer<T>::operator==(std::nullptr_t) noexcept
 {
-	return _controlBlock == nullptr;
+	return !TargetExists();
 }
 
 template <typename T>
 bool Pointer<T>::operator!=(std::nullptr_t) noexcept
 {
-	return _controlBlock != nullptr;
+	return TargetExists();
 }
 
 
@@ -126,8 +119,11 @@ Pointer<T>& Pointer<T>::operator=(T* other) noexcept
 {
 	static_assert(std::is_base_of_v<Object, T>, "T must inherit from Object");
 
-	_controlBlock = reinterpret_cast<PointerControlBlock<T>*>(other->_controlBlock);
-	_controlBlock->AddLink();
+	if (other == nullptr)
+		SetControlBlock(nullptr);
+	else
+		SetControlBlock(reinterpret_cast<PointerControlBlock<T>*>(other->_controlBlock));
+
 	return *this;
 }
 
@@ -139,17 +135,49 @@ Pointer<T>& Pointer<T>::operator=(T other) noexcept
 	return this;
 }
 
-// Assign
-template <typename T>
-T* Pointer<T>::Get() const
+
+template<typename T>
+Pointer<T>::operator bool() const
 {
-	return _controlBlock->Get();
+	return _controlBlock != nullptr && _controlBlock->_target != nullptr;;
 }
 
 template <typename T>
-Pointer<T>::Pointer(T* other) 
+inline T* Pointer<T>::Get() const
 {
-	static_assert(std::is_base_of_v<Object, T>, "T must inherit from Object");
-	_controlBlock = reinterpret_cast<PointerControlBlock<T>*>(other->_controlBlock);
-	_controlBlock->AddLink();
+	return _controlBlock->_target;
+}
+
+template<typename T>
+inline bool Pointer<T>::ControlBlockExists()
+{
+	return _controlBlock != nullptr;
+}
+
+template<typename T>
+inline bool Pointer<T>::TargetExists()
+{
+	return ControlBlockExists() && _controlBlock->_target != nullptr;
+}
+
+template<typename T>
+inline void Pointer<T>::LinkControlBlock()
+{
+	if (ControlBlockExists())
+		_controlBlock->AddLink();
+}
+
+template<typename T>
+inline void Pointer<T>::UnlinkControlBlock()
+{
+	if (ControlBlockExists())
+		_controlBlock->RemoveLink();
+}
+
+template<typename T>
+inline void Pointer<T>::SetControlBlock(PointerControlBlock<T>* newBlock)
+{
+	UnlinkControlBlock();
+	_controlBlock = newBlock;
+	LinkControlBlock();
 }
