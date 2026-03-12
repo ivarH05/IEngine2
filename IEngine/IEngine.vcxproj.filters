@@ -10,6 +10,12 @@
     <ClCompile Include="External\glad\src\glad.c">
       <Filter>External</Filter>
     </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="PointerControlBlock.inl">
+      <Filter>Core\Memory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector3.h">
@@ -17,6 +23,15 @@
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Pointer.h">
+      <Filter>Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="PointerControlBlock.h">
+      <Filter>Core\Memory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -41,6 +56,9 @@
     <Filter Include="External">
       <UniqueIdentifier>{b7f060a9-5f75-4684-96f0-25501411e6b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Memory">
+      <UniqueIdentifier>{9c51636e-2a14-4a4f-b281-2ebf97d6805c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Rendering\Shaders\DefaultFragmentShader.glsl">
@@ -48,6 +66,9 @@
     </None>
     <None Include="Engine\Rendering\Shaders\DefaultVertexShader.glsl">
       <Filter>Engine\Rendering\Shaders</Filter>
+    </None>
+    <None Include="Pointer.inl">
+      <Filter>Core\Memory</Filter>
     </None>
   </ItemGroup>
 </Project>
