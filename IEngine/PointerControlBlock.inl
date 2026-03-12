@@ -4,7 +4,7 @@
 #include "Object.h"
 
 template <typename T>
-PointerControlBlock<T>::PointerControlBlock(T* object) : _linkCount(0), _objectExists(true), _target(object)
+PointerControlBlock<T>::PointerControlBlock(T* object) : _linkCount(0), _target(object)
 {
 }
 
@@ -12,21 +12,29 @@ template <typename T>
 void PointerControlBlock<T>::Disassemble()
 {
 	_target = nullptr;
-	_objectExists = false;
 }
 
 
 template <typename T>
 void PointerControlBlock<T>::AddLink()
 {
+	std::cout << "Link added\n";
 	_linkCount++;
 }
 
 template <typename T>
 void PointerControlBlock<T>::RemoveLink()
 {
+	std::cout << "Link removed\n";
 	_linkCount--;
-	Disassemble();
+
+	if (_linkCount > 0)
+		return;
+
+	if (_target != nullptr)
+		delete _target;
+
+	delete this;
 }
 
 

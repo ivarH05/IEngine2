@@ -17,6 +17,7 @@ namespace IEngine
 		Vector3 scale = Vector3(1, 1, 1);
 		unsigned int shaderProgram;
 		unsigned int VAO;
+		unsigned int VBO;
 		int positionLoc;
 		int rotationLoc;
 		int scaleLoc;
@@ -66,7 +67,6 @@ namespace IEngine
 				 0.0f,  0.5f, 0.0f
 			};
 
-			unsigned int VBO;
 			glGenVertexArrays(1, &VAO);
 			glGenBuffers(1, &VBO);
 
@@ -87,6 +87,13 @@ namespace IEngine
 			glUniform3f(scaleLoc, scale.x, scale.y, scale.z);
 			glBindVertexArray(VAO);
 			glDrawArrays(GL_TRIANGLES, 0, 3);
+		}
+
+		~GameObject()
+		{
+			glDeleteProgram(shaderProgram);
+			glDeleteVertexArrays(1, &VAO);
+			glDeleteBuffers(1, &VBO);
 		}
 	};
 }

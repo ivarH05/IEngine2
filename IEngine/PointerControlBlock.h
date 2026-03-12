@@ -26,7 +26,6 @@ private:
 
 	T* _target = nullptr;
 	int _linkCount = 0;
-	bool _objectExists = false;
 };
 
 #include "PointerControlBlock.inl"
