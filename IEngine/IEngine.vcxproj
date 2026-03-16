@@ -134,15 +134,23 @@ opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     <ClCompile Include="External\glad\src\glad.c" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mathf.cpp" />
+    <ClCompile Include="Matrix4x4.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="PointerControlBlock.inl" />
+    <ClCompile Include="Vector3.cpp" />
+    <ClCompile Include="Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Mathf.h" />
+    <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="PointerControlBlock.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Pointer.h" />
+    <ClInclude Include="Quaternion.h" />
     <ClInclude Include="Vector3.h" />
+    <ClInclude Include="Vector4.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Rendering\Shaders\DefaultFragmentShader.glsl" />

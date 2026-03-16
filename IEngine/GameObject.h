@@ -5,6 +5,7 @@
 #include <sstream>
 #include <string>
 #include "Vector3.h"
+#include "Matrix4x4.h"
 #include "Object.h"
 
 namespace IEngine
