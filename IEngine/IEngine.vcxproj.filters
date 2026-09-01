@@ -5,7 +5,7 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>Scene</Filter>
+      <Filter>Core\Scene</Filter>
     </ClCompile>
     <ClCompile Include="External\glad\src\glad.c">
       <Filter>External</Filter>
@@ -17,24 +17,33 @@
       <Filter>Core\Memory</Filter>
     </ClCompile>
     <ClCompile Include="Vector3.cpp">
-      <Filter>Math</Filter>
+      <Filter>Core\Math</Filter>
     </ClCompile>
     <ClCompile Include="Matrix4x4.cpp">
-      <Filter>Math</Filter>
+      <Filter>Core\Math</Filter>
     </ClCompile>
     <ClCompile Include="Vector4.cpp">
-      <Filter>Math</Filter>
+      <Filter>Core\Math</Filter>
     </ClCompile>
     <ClCompile Include="Mathf.cpp">
-      <Filter>Math</Filter>
+      <Filter>Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Core\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion.cpp">
+      <Filter>Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Core\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector3.h">
-      <Filter>Math</Filter>
+      <Filter>Core\Math</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>Scene</Filter>
+      <Filter>Core\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Object.h">
       <Filter>Core</Filter>
@@ -46,27 +55,27 @@
       <Filter>Core\Memory</Filter>
     </ClInclude>
     <ClInclude Include="Mathf.h">
-      <Filter>Math</Filter>
+      <Filter>Core\Math</Filter>
     </ClInclude>
     <ClInclude Include="Matrix4x4.h">
-      <Filter>Math</Filter>
+      <Filter>Core\Math</Filter>
     </ClInclude>
     <ClInclude Include="Quaternion.h">
-      <Filter>Math</Filter>
+      <Filter>Core\Math</Filter>
     </ClInclude>
     <ClInclude Include="Vector4.h">
-      <Filter>Math</Filter>
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Core\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
       <UniqueIdentifier>{7a828044-fa5a-4942-8f8a-8a5fc183d73e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scene">
-      <UniqueIdentifier>{88331025-9262-4ec5-bce2-b2f9865a164b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Math">
-      <UniqueIdentifier>{8533b2f1-a325-4983-ae7f-913b16720dbc}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine">
       <UniqueIdentifier>{91fcb41b-1b70-4f13-953f-987cdb609b66}</UniqueIdentifier>
@@ -83,6 +92,12 @@
     <Filter Include="Core\Memory">
       <UniqueIdentifier>{9c51636e-2a14-4a4f-b281-2ebf97d6805c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Scene">
+      <UniqueIdentifier>{88331025-9262-4ec5-bce2-b2f9865a164b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Math">
+      <UniqueIdentifier>{8533b2f1-a325-4983-ae7f-913b16720dbc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Rendering\Shaders\DefaultFragmentShader.glsl">
@@ -93,6 +108,9 @@
     </None>
     <None Include="Pointer.inl">
       <Filter>Core\Memory</Filter>
+    </None>
+    <None Include="GameObject.inl">
+      <Filter>Core\Scene</Filter>
     </None>
   </ItemGroup>
 </Project>

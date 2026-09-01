@@ -27,6 +27,7 @@ namespace IEngine
 		static float Max(float a, float b);
 
 		static float CopySign(float magnitude, float sign);
+		static float Sign(float value);
 
 		static const float Deg2Rad;
 		static const float Rad2Deg;

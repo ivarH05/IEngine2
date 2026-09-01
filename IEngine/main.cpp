@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include "GameObject.h"
+#include "Transform.h"
 #include "Pointer.h"
 using namespace IEngine;
 
@@ -32,6 +33,8 @@ int main()
     Pointer<GameObject> object2 = new GameObject();
     object2->instantiate("Engine/Rendering/Shaders/ExampleFragmentShader.glsl");
 
+    Vector3 rot = Vector3::Zero();
+
     while (!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
@@ -50,28 +53,34 @@ int main()
 
         float moveSpeed = 0.01f;
         float scaleSpeed = 0.01f;
-        float rotSpeed = 0.02f;
+        float rotSpeed = 1.0f;
 
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) object->position.y += moveSpeed;
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) object->position.y -= moveSpeed;
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) object->position.x -= moveSpeed;
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) object->position.x += moveSpeed;
+		Vector3 pos = object->transform->GetPosition(); 
+		Vector3 scale = object->transform->GetLossyScale();
 
-        if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) object->position.z -= moveSpeed;
-        if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) object->position.z += moveSpeed;
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) pos.y += moveSpeed;
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) pos.y -= moveSpeed;
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) pos.x -= moveSpeed;
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) pos.x += moveSpeed;
 
-        if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) object->scale.x += scaleSpeed;
-        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) object->scale.x -= scaleSpeed;
-        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) object->scale.y += scaleSpeed;
-        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) object->scale.y -= scaleSpeed;
+        if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) pos.z -= moveSpeed;
+        if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) pos.z += moveSpeed;
 
-        if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) object->rotation.z += rotSpeed;
-        if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) object->rotation.z -= rotSpeed;
-        if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) object->rotation.x += rotSpeed;
-        if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) object->rotation.x -= rotSpeed;
-        if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) object->rotation.y += rotSpeed;
-        if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) object->rotation.y -= rotSpeed;
+        if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) scale.x += scaleSpeed;
+        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) scale.x -= scaleSpeed;
+        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) scale.y += scaleSpeed;
+        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) scale.y -= scaleSpeed;
 
+        if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) rot.z += rotSpeed;
+        if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) rot.z -= rotSpeed;
+        if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) rot.x += rotSpeed;
+        if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) rot.x -= rotSpeed;
+        if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) rot.y += rotSpeed;
+        if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) rot.y -= rotSpeed;
+
+		object->transform->SetPosition(pos);
+		object->transform->SetLocalEulerAngles(rot);
+		object->transform->SetLossyScale(scale);
     }
 
     glfwTerminate();

@@ -4,24 +4,26 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <vector>
+
 #include "Vector3.h"
 #include "Matrix4x4.h"
 #include "Object.h"
+#include "Pointer.h"
 
 namespace IEngine
 {
+	class Transform;
+	class Component;
+
 	class GameObject : public Object
 	{
 	public:
-		Vector3 position;
-		Vector3 rotation;
-		Vector3 scale = Vector3(1, 1, 1);
+		/* TEMP */
 		unsigned int shaderProgram;
 		unsigned int VAO;
 		unsigned int VBO;
-		int positionLoc;
-		int rotationLoc;
-		int scaleLoc;
+		int transformLoc;
 
 		static std::string ReadTextFile(const char* path)
 		{
@@ -56,9 +58,7 @@ namespace IEngine
 			glDeleteShader(vertexShader);
 			glDeleteShader(fragmentShader);
 
-			positionLoc = glGetUniformLocation(shaderProgram, "position");
-			rotationLoc = glGetUniformLocation(shaderProgram, "rotation");
-			scaleLoc = glGetUniformLocation(shaderProgram, "scale");
+			transformLoc = glGetUniformLocation(shaderProgram, "transform");
 
 
 			// Initiate mesh
@@ -80,15 +80,7 @@ namespace IEngine
 			glEnableVertexAttribArray(0);
 		}
 
-		void OnRender()
-		{
-			glUseProgram(shaderProgram);
-			glUniform3f(positionLoc, position.x, position.y, position.z);
-			glUniform3f(rotationLoc, rotation.x, rotation.y, rotation.z);
-			glUniform3f(scaleLoc, scale.x, scale.y, scale.z);
-			glBindVertexArray(VAO);
-			glDrawArrays(GL_TRIANGLES, 0, 3);
-		}
+		void OnRender();
 
 		~GameObject()
 		{
@@ -96,5 +88,22 @@ namespace IEngine
 			glDeleteVertexArrays(1, &VAO);
 			glDeleteBuffers(1, &VBO);
 		}
+
+		/* END OF TEMP */
+
+		GameObject();
+
+		template <typename T>
+		Pointer<T> AddComponent();
+
+		template <typename T>
+		Pointer<T> GetComponent();
+
+		const Pointer<Transform> transform;
+
+	private:
+		std::vector<Pointer<Component>> _components;
 	};
 }
+
+#include "GameObject.inl"

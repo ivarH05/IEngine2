@@ -66,6 +66,11 @@ namespace IEngine
 		return std::copysign(magnitude, sign);
 	}
 
+	float Mathf::Sign(float value)
+	{
+		return (value > 0) - (value < 0);
+	}
+
 
 	float Mathf::Clamp01(float value)
 	{
