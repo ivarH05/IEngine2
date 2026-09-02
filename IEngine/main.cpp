@@ -2,8 +2,25 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include "GameObject.h"
-#include "Pointer.h"
 using namespace IEngine;
+
+const char* defaultVertexShader = R"(
+#version 330 core
+layout (location = 0) in vec3 aPos;
+void main()
+{
+    gl_Position = vec4(aPos, 1.0);
+}
+)";
+
+const char* defaultFragmentShader = R"(
+#version 330 core
+out vec4 FragColor;
+void main()
+{
+    FragColor = vec4(1.0, 0.0, 1.0, 1.0);
+}
+)";
 
 int main()
 {
@@ -27,10 +44,8 @@ int main()
     }
 
     glViewport(0, 0, 800, 600);
-    Pointer<GameObject> object = new GameObject();
-    object->instantiate();
-    Pointer<GameObject> object2 = new GameObject();
-    object2->instantiate("Engine/Rendering/Shaders/ExampleFragmentShader.glsl");
+    GameObject object = GameObject();
+    GameObject object2 = GameObject("Engine/Rendering/Shaders/ExampleFragmentShader.glsl");
 
     while (!glfwWindowShouldClose(window))
     {
@@ -44,33 +59,33 @@ int main()
         glDepthFunc(GL_GREATER);
         glDepthMask(GL_TRUE);
 
-        object->OnRender();
-        object2->OnRender();
+        object.OnRender();
+        object2.OnRender();
         glfwSwapBuffers(window);
 
         float moveSpeed = 0.01f;
         float scaleSpeed = 0.01f;
         float rotSpeed = 0.02f;
 
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) object->position.y += moveSpeed;
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) object->position.y -= moveSpeed;
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) object->position.x -= moveSpeed;
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) object->position.x += moveSpeed;
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) object.position.y += moveSpeed;
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) object.position.y -= moveSpeed;
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) object.position.x -= moveSpeed;
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) object.position.x += moveSpeed;
 
-        if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) object->position.z -= moveSpeed;
-        if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) object->position.z += moveSpeed;
+        if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) object.position.z -= moveSpeed;
+        if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) object.position.z += moveSpeed;
 
-        if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) object->scale.x += scaleSpeed;
-        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) object->scale.x -= scaleSpeed;
-        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) object->scale.y += scaleSpeed;
-        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) object->scale.y -= scaleSpeed;
+        if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) object.scale.x += scaleSpeed;
+        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) object.scale.x -= scaleSpeed;
+        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) object.scale.y += scaleSpeed;
+        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) object.scale.y -= scaleSpeed;
 
-        if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) object->rotation.z += rotSpeed;
-        if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) object->rotation.z -= rotSpeed;
-        if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) object->rotation.x += rotSpeed;
-        if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) object->rotation.x -= rotSpeed;
-        if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) object->rotation.y += rotSpeed;
-        if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) object->rotation.y -= rotSpeed;
+        if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) object.rotation.z += rotSpeed;
+        if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) object.rotation.z -= rotSpeed;
+        if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) object.rotation.x += rotSpeed;
+        if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) object.rotation.x -= rotSpeed;
+        if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) object.rotation.y += rotSpeed;
+        if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) object.rotation.y -= rotSpeed;
 
     }
 
