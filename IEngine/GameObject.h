@@ -1,25 +1,29 @@
 #pragma once
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <vector>
+
 #include "Vector3.h"
+#include "Matrix4x4.h"
+#include "Object.h"
+#include "Pointer.h"
 
 namespace IEngine
 {
-	class GameObject
+	class Transform;
+	class Component;
+
+	class GameObject : public Object
 	{
 	public:
-		Vector3 position;
-		Vector3 rotation;
-		Vector3 scale = Vector3(1, 1, 1);
+		/* TEMP */
 		unsigned int shaderProgram;
 		unsigned int VAO;
-		int positionLoc;
-		int rotationLoc;
-		int scaleLoc;
+		unsigned int VBO;
+		int transformLoc;
 
 		static std::string ReadTextFile(const char* path)
 		{
@@ -29,9 +33,9 @@ namespace IEngine
 			return buffer.str();
 		}
 
-		GameObject(const char* shader = "Engine/Rendering/Shaders/DefaultFragmentShader.glsl")
+		void instantiate(const char* shader = "Engine/Rendering/Shaders/DefaultFragmentShader.glsl")
 		{
-			// Initiate material
+			// Initiate materiald
 			unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
 			unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
@@ -54,9 +58,7 @@ namespace IEngine
 			glDeleteShader(vertexShader);
 			glDeleteShader(fragmentShader);
 
-			positionLoc = glGetUniformLocation(shaderProgram, "position");
-			rotationLoc = glGetUniformLocation(shaderProgram, "rotation");
-			scaleLoc = glGetUniformLocation(shaderProgram, "scale");
+			transformLoc = glGetUniformLocation(shaderProgram, "transform");
 
 
 			// Initiate mesh
@@ -66,7 +68,6 @@ namespace IEngine
 				 0.0f,  0.5f, 0.0f
 			};
 
-			unsigned int VBO;
 			glGenVertexArrays(1, &VAO);
 			glGenBuffers(1, &VBO);
 
@@ -79,14 +80,30 @@ namespace IEngine
 			glEnableVertexAttribArray(0);
 		}
 
-		void OnRender()
+		void OnRender();
+
+		~GameObject()
 		{
-			glUseProgram(shaderProgram);
-			glUniform3f(positionLoc, position.x, position.y, position.z);
-			glUniform3f(rotationLoc, rotation.x, rotation.y, rotation.z);
-			glUniform3f(scaleLoc, scale.x, scale.y, scale.z);
-			glBindVertexArray(VAO);
-			glDrawArrays(GL_TRIANGLES, 0, 3);
+			glDeleteProgram(shaderProgram);
+			glDeleteVertexArrays(1, &VAO);
+			glDeleteBuffers(1, &VBO);
 		}
+
+		/* END OF TEMP */
+
+		GameObject();
+
+		template <typename T>
+		Pointer<T> AddComponent();
+
+		template <typename T>
+		Pointer<T> GetComponent();
+
+		const Pointer<Transform> transform;
+
+	private:
+		std::vector<Pointer<Component>> _components;
 	};
 }
+
+#include "GameObject.inl"
