@@ -30,6 +30,13 @@ int main()
     glViewport(0, 0, 800, 600);
     Pointer<GameObject> object = new GameObject();
     object->instantiate();
+    Pointer<GameObject> object1 = new GameObject();
+    object1->instantiate();
+	object1->transform->SetParent(object->transform);
+    object1->transform->SetLocalEulerAngles(Vector3(0.0f, 90.0f, 0.0f));
+    object1->transform->SetLocalPosition(Vector3(0.0f, 0.5f, 0.0f));
+	object1->transform->SetLocalScale(Vector3(0.5f, 0.5f, 0.5f));
+
     Pointer<GameObject> object2 = new GameObject();
     object2->instantiate("Engine/Rendering/Shaders/ExampleFragmentShader.glsl");
 
@@ -48,6 +55,7 @@ int main()
         glDepthMask(GL_TRUE);
 
         object->OnRender();
+        object1->OnRender();
         object2->OnRender();
         glfwSwapBuffers(window);
 
@@ -70,13 +78,15 @@ int main()
         if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) scale.x -= scaleSpeed;
         if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) scale.y += scaleSpeed;
         if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) scale.y -= scaleSpeed;
+        if (glfwGetKey(window, GLFW_KEY_PERIOD) == GLFW_PRESS) scale.z += scaleSpeed;
+        if (glfwGetKey(window, GLFW_KEY_COMMA) == GLFW_PRESS) scale.z -= scaleSpeed;
 
-        if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) rot.z += rotSpeed;
-        if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) rot.z -= rotSpeed;
+        if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) rot.y += rotSpeed;
+        if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) rot.y -= rotSpeed;
         if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) rot.x += rotSpeed;
         if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) rot.x -= rotSpeed;
-        if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) rot.y += rotSpeed;
-        if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) rot.y -= rotSpeed;
+        if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) rot.z += rotSpeed;
+        if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) rot.z -= rotSpeed;
 
 		object->transform->SetPosition(pos);
 		object->transform->SetLocalEulerAngles(rot);

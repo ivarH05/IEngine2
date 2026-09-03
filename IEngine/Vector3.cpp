@@ -1,4 +1,5 @@
 #include "Vector3.h";
+#include "Matrix4x4.h"
 #include "Mathf.h"
 
 namespace IEngine
@@ -44,7 +45,7 @@ namespace IEngine
 	}
 
 
-	Vector3 Vector3::operator*(Quaternion quaternion) const
+	Vector3 Vector3::operator*(const Quaternion& quaternion) const
 	{
 		const Quaternion v(x, y, z, 0.0f);
 		const Quaternion result = quaternion * v * quaternion.Conjugate();
@@ -52,6 +53,14 @@ namespace IEngine
 		return Vector3{ result.x, result.y, result.z };
 	}
 
+	Vector3 Vector3::operator*(const Matrix4x4& m) const
+	{
+		return Vector3(
+			x * m.m00 + y * m.m10 + z * m.m20 + m.m30,
+			x * m.m01 + y * m.m11 + z * m.m21 + m.m31,
+			x * m.m02 + y * m.m12 + z * m.m22 + m.m32
+		);
+	}
 
 
 	constexpr float Vector3::Dot(const Vector3& other) const

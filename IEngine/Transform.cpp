@@ -50,25 +50,23 @@ namespace IEngine
 
 	void Transform::SetParent(const Pointer<Transform> value)
 	{
+		if(value == this)
+			throw std::invalid_argument("Cannot set parent to self.");
+
 		if (_parent == value)
 			return;
 		if (_parent != nullptr)
 			_parent->RemoveChild(*this);
 		if (value != nullptr)
 			value->AddChild(*this);
+		_parent = value;
 
 		MarkDirty(true, true, true, true);
 	}
 
 	Vector3 Transform::TransformPoint(const Vector3& point)
 	{
-		Vector3 position = GetPosition();
-		Quaternion rotation = GetRotation();
-		Vector3 lossyScale = GetLossyScale();
-
-		Vector3 scaledPoint = Vector3(point.x * lossyScale.x, point.y * lossyScale.y, point.z * lossyScale.z);
-		Vector3 rotatedPoint = scaledPoint * rotation;
-		return position + rotatedPoint;
+		return point * GetMatrix();
 	}
 
 	Vector3 Transform::InverseTransformPoint(const Vector3& point)
@@ -292,7 +290,7 @@ namespace IEngine
 		if (!_localMatrixDirty)
 			return _localMatrix;
 
-		Vector3 localPosition = GetLocalPosition();
+		/*Vector3 localPosition = GetLocalPosition();
 		Quaternion localRotation = GetLocalRotation();
 		Vector3 localScale = GetLocalScale();
 
@@ -341,9 +339,12 @@ namespace IEngine
 		_localMatrix.m30 = localPosition.x;
 		_localMatrix.m31 = localPosition.y;
 		_localMatrix.m32 = localPosition.z;
-		_localMatrix.m33 = 1.0f;
+		_localMatrix.m33 = 1.0f;*/
+
+		_localMatrix = Matrix4x4::TRS(GetLocalPosition(), GetLocalRotation(), GetLocalScale());
 
 		_localMatrixDirty = false;
+
 		return _localMatrix;
 	}
 
@@ -372,5 +373,36 @@ namespace IEngine
 
 		for (auto& child : _children)
 			child->MarkDirty(position, rotation, scale, true);
+	}
+
+	void Transform::SetActiveInHierarchy(bool value)
+	{
+		if (_isActiveInHierarchy == value)
+			return;
+		_isActiveInHierarchy = value;
+
+		if (!_isActive)
+			return;
+
+		for (auto& child : _children)
+			child->SetActiveInHierarchy(value);
+	}
+
+	void Transform::SetActive(bool value)
+	{
+		if (_isActive == value)
+			return;
+		_isActive = value;
+
+		if (!_isActiveInHierarchy)
+			return;
+
+		for (auto& child : _children)
+			SetActiveInHierarchy(value);
+	}
+
+	bool Transform::IsActive() const
+	{
+		return _isActive && _isActiveInHierarchy;
 	}
 }
