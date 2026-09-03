@@ -76,6 +76,15 @@ namespace IEngine
 		);
 	}
 
+	Vector3 Matrix4x4::operator*(const Vector3& other) const
+	{
+		return Vector3(
+			m00 * other.x + m01 * other.y + m02 * other.z + m03,
+			m10 * other.x + m11 * other.y + m12 * other.z + m13,
+			m20 * other.x + m21 * other.y + m22 * other.z + m23
+		);
+	}
+
 	constexpr bool Matrix4x4::operator==(const Matrix4x4& other) const
 	{
 		return 
@@ -109,6 +118,24 @@ namespace IEngine
 			0, 0, 0, 1
 		);
 	}
+	Matrix4x4 Matrix4x4::TRS(const Vector3& translation, const Quaternion& rotation, const Vector3& scale)
+	{
+		Matrix4x4 translationMatrix(
+			1, 0, 0, translation.x,
+			0, 1, 0, translation.y,
+			0, 0, 1, translation.z,
+			0, 0, 0, 1
+		);
+		Matrix4x4 rotationMatrix = rotation.ToMatrix();
+		Matrix4x4 scaleMatrix(
+			scale.x, 0, 0, 0,
+			0, scale.y, 0, 0,
+			0, 0, scale.z, 0,
+			0, 0, 0, 1
+		);
+		return translationMatrix * rotationMatrix * scaleMatrix;
+	}
+
 
 	Vector4 Matrix4x4::GetRow(int index) const
 	{

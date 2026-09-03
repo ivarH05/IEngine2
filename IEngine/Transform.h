@@ -15,6 +15,8 @@ namespace IEngine
 		public Component
     {
     public:
+		void SetActive(bool value);
+		bool IsActive() const;
 
 		Vector3 GetPosition();
 		void SetPosition(const Vector3& value);
@@ -48,6 +50,9 @@ namespace IEngine
 		Vector3 InverseTransformPoint(const Vector3& point);
 
     private:
+		bool _isActive = true;
+		bool _isActiveInHierarchy = true;
+
 		Pointer<Transform> _parent;
 		Vector<Pointer<Transform>> _children = Vector<Pointer<Transform>>();
 
@@ -77,5 +82,6 @@ namespace IEngine
 		void RemoveChild(const Transform& child);
 
 		void MarkDirty(bool position, bool rotation, bool scale, bool includeSelf = false);
+		void SetActiveInHierarchy(bool value);
     };
 }

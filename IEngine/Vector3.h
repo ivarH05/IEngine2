@@ -4,6 +4,8 @@
 
 namespace IEngine
 {
+	struct Matrix4x4;
+
 	struct Vector3
 	{
 	public:
@@ -27,7 +29,8 @@ namespace IEngine
 		constexpr bool operator==(const Vector3& other) const;
 		constexpr bool operator!=(const Vector3& other) const;
 
-		Vector3 operator*(Quaternion quaternion) const;
+		Vector3 operator*(const Quaternion& quaternion) const;
+		Vector3 operator*(const Matrix4x4& m) const;
 
 		constexpr float Dot(const Vector3& other) const;
 		constexpr Vector3 Cross(const Vector3& other) const;

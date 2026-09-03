@@ -1,5 +1,6 @@
 #include "Quaternion.h"
 #include "Vector3.h"
+#include "Matrix4x4.h"
 #include "Mathf.h"
 
 namespace IEngine
@@ -80,16 +81,19 @@ namespace IEngine
 	{
 		float sinr_cosp = 2 * (w * x + y * z);
 		float cosr_cosp = 1 - 2 * (x * x + y * y);
-		float roll = Mathf::Atan2(sinr_cosp, cosr_cosp);
+		float pitch = Mathf::Atan2(sinr_cosp, cosr_cosp);
+
 		float sinp = 2 * (w * y - z * x);
-		float pitch;
+		float yaw;
 		if (Mathf::Abs(sinp) >= 1)
-			pitch = Mathf::CopySign(Mathf::PI / 2, sinp);
+			yaw = Mathf::CopySign(Mathf::PI / 2, sinp);
 		else
-			pitch = Mathf::Asin(sinp);
+			yaw = Mathf::Asin(sinp);
+
 		float siny_cosp = 2 * (w * z + x * y);
 		float cosy_cosp = 1 - 2 * (y * y + z * z);
-		float yaw = Mathf::Atan2(siny_cosp, cosy_cosp);
+		float roll = Mathf::Atan2(siny_cosp, cosy_cosp);
+
 		return Vector3(pitch, yaw, roll) * Mathf::Rad2Deg;
 	}
 
@@ -99,17 +103,36 @@ namespace IEngine
 		float yawRads = yaw * Mathf::Deg2Rad;
 		float rollRads = roll * Mathf::Deg2Rad;
 
-		float cy = Mathf::Cos(yawRads * 0.5f);
-		float sy = Mathf::Sin(yawRads * 0.5f);
-		float cp = Mathf::Cos(pitchRads * 0.5f);
-		float sp = Mathf::Sin(pitchRads * 0.5f);
-		float cr = Mathf::Cos(rollRads * 0.5f);
-		float sr = Mathf::Sin(rollRads * 0.5f);
+		float cr = Mathf::Cos(pitchRads * 0.5f);
+		float sr = Mathf::Sin(pitchRads * 0.5f);
+		float cp = Mathf::Cos(yawRads * 0.5f);
+		float sp = Mathf::Sin(yawRads * 0.5f);
+		float cy = Mathf::Cos(rollRads * 0.5f);
+		float sy = Mathf::Sin(rollRads * 0.5f);
 		return Quaternion(
 			cr * cp * cy + sr * sp * sy,
 			sr * cp * cy - cr * sp * sy,
 			cr * sp * cy + sr * cp * sy,
 			cr * cp * sy - sr * sp * cy
+		);
+	}
+
+	Matrix4x4 Quaternion::ToMatrix() const
+	{
+		float xx = x * x;
+		float yy = y * y;
+		float zz = z * z;
+		float xy = x * y;
+		float xz = x * z;
+		float yz = y * z;
+		float wx = w * x;
+		float wy = w * y;
+		float wz = w * z;
+		return Matrix4x4(
+			1.0f - 2.0f * (yy + zz), 2.0f * (xy - wz), 2.0f * (xz + wy), 0.0f,
+			2.0f * (xy + wz), 1.0f - 2.0f * (xx + zz), 2.0f * (yz - wx), 0.0f,
+			2.0f * (xz - wy), 2.0f * (yz + wx), 1.0f - 2.0f * (xx + yy), 0.0f,
+			0.0f, 0.0f, 0.0f, 1.0f
 		);
 	}
 

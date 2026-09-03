@@ -34,6 +34,9 @@ namespace IEngine
 		Matrix4x4 operator+(const Matrix4x4& other) const;
 		Matrix4x4 operator-(const Matrix4x4& other) const;
 		Matrix4x4 operator*(const Matrix4x4& other) const;
+
+		Vector3 operator*(const Vector3& other) const;
+
 		Matrix4x4 operator*(float scalar) const;
 		Matrix4x4 operator/(float scalar) const;
 
@@ -43,6 +46,7 @@ namespace IEngine
 		constexpr bool operator!=(const Matrix4x4& other) const;
 
 		static Matrix4x4 Identity();
+		static Matrix4x4 TRS(const Vector3& translation, const Quaternion& rotation, const Vector3& scale);
 
 		Matrix4x4 Transpose() const;
 		Matrix4x4 Inverse() const;

@@ -4,6 +4,7 @@
 namespace IEngine
 {
 	struct Vector3;
+	struct Matrix4x4;
 
 	struct Quaternion
 	{
@@ -38,6 +39,7 @@ namespace IEngine
 		float NormSquared() const;
 
 		Vector3 EulerAngles() const;
+		Matrix4x4 ToMatrix() const;
 
 		operator std::string() const;
 		std::string ToString() const;
