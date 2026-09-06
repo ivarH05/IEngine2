@@ -28,13 +28,17 @@
     <ClCompile Include="Mathf.cpp">
       <Filter>Core\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp">
-      <Filter>Core\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Quaternion.cpp">
       <Filter>Core\Math</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
+      <Filter>Core\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="MonoBehaviourManager.cpp">
+      <Filter>Core\Runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp" />
+    <ClCompile Include="Component.cpp">
       <Filter>Core\Scene</Filter>
     </ClCompile>
   </ItemGroup>
@@ -72,6 +76,14 @@
     <ClInclude Include="Transform.h">
       <Filter>Core\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="MonoBehaviour.h">
+      <Filter>Core\Runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="MonoBehaviourManager.h">
+      <Filter>Core\Runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -98,6 +110,9 @@
     <Filter Include="Core\Math">
       <UniqueIdentifier>{8533b2f1-a325-4983-ae7f-913b16720dbc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Runtime">
+      <UniqueIdentifier>{5dd6a238-ee03-47b2-afbe-3518dbe8cbd3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Rendering\Shaders\DefaultFragmentShader.glsl">
@@ -111,6 +126,12 @@
     </None>
     <None Include="GameObject.inl">
       <Filter>Core\Scene</Filter>
+    </None>
+    <None Include="MonoBehaviour.inl">
+      <Filter>Core\Runtime</Filter>
+    </None>
+    <None Include="MonoBehaviourManager.inl">
+      <Filter>Core\Runtime</Filter>
     </None>
   </ItemGroup>
 </Project>

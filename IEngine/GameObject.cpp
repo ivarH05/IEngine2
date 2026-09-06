@@ -14,8 +14,9 @@ namespace IEngine
 	}
 	/* END OF TEMP */
 
-	GameObject::GameObject() : transform(new Transform())
+	GameObject::GameObject() : transform(new Transform()), VAO(0), VBO(0), shaderProgram(0), transformLoc(0)
 	{
 		_components.push_back(Pointer<Component>(transform));
+		transform->InitializeComponent(Pointer<GameObject>(this));
 	}
 }
