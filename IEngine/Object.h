@@ -1,15 +1,18 @@
 #pragma once
 #include "PointerControlBlock.h"
 
-template <typename T>
-struct Pointer;
-
-class Object
+namespace IEngine
 {
-public:
-	Object();
-	~Object();
+	template <typename T>
+	struct Pointer;
 
-	PointerControlBlock<Object>* _controlBlock;
-private:
-};
+	class Object
+	{
+	public:
+		Object();
+		~Object();
+		const std::size_t guid;
+
+		PointerControlBlock<Object>* _controlBlock;
+	};
+}

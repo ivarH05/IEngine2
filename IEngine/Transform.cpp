@@ -14,7 +14,7 @@ namespace IEngine
 
 	void Transform::AddChild(const Transform& child)
 	{
-		AddChild(Pointer<Transform>(&child));
+		AddChild(Pointer<Transform>(const_cast<Transform*>(&child)));
 	}
 
 	void Transform::RemoveChild(const Pointer<Transform> child)
@@ -28,7 +28,7 @@ namespace IEngine
 
 	void Transform::RemoveChild(const Transform& child)
 	{
-		RemoveChild(Pointer<Transform>(&child));
+		RemoveChild(Pointer<Transform>(const_cast<Transform*>(&child)));
 	}
 
 	Pointer<Transform> Transform::GetParent() const
@@ -289,58 +289,6 @@ namespace IEngine
 	{
 		if (!_localMatrixDirty)
 			return _localMatrix;
-
-		/*Vector3 localPosition = GetLocalPosition();
-		Quaternion localRotation = GetLocalRotation();
-		Vector3 localScale = GetLocalScale();
-
-		const float x = localRotation.x;
-		const float y = localRotation.y;
-		const float z = localRotation.z;
-		const float w = localRotation.w;
-
-		const float xx = x + x;
-		const float yy = y + y;
-		const float zz = z + z;
-
-		const float xx2 = x * xx;
-		const float yy2 = y * yy;
-		const float zz2 = z * zz;
-
-		const float xy = x * yy;
-		const float xz = x * zz;
-		const float yz = y * zz;
-
-		const float wx = w * xx;
-		const float wy = w * yy;
-		const float wz = w * zz;
-
-		const float sx = localScale.x;
-		const float sy = localScale.y;
-		const float sz = localScale.z;
-
-		// Rotation * Scale
-		_localMatrix.m00 = (1.0f - (yy2 + zz2)) * sx;
-		_localMatrix.m01 = (xy + wz) * sy;
-		_localMatrix.m02 = (xz - wy) * sz;
-		_localMatrix.m03 = 0.0f;
-
-		_localMatrix.m10 = (xy - wz) * sx;
-		_localMatrix.m11 = (1.0f - (xx2 + zz2)) * sy;
-		_localMatrix.m12 = (yz + wx) * sz;
-		_localMatrix.m13 = 0.0f;
-
-		_localMatrix.m20 = (xz + wy) * sx;
-		_localMatrix.m21 = (yz - wx) * sy;
-		_localMatrix.m22 = (1.0f - (xx2 + yy2)) * sz;
-		_localMatrix.m23 = 0.0f;
-
-		// Translation
-		_localMatrix.m30 = localPosition.x;
-		_localMatrix.m31 = localPosition.y;
-		_localMatrix.m32 = localPosition.z;
-		_localMatrix.m33 = 1.0f;*/
-
 		_localMatrix = Matrix4x4::TRS(GetLocalPosition(), GetLocalRotation(), GetLocalScale());
 
 		_localMatrixDirty = false;

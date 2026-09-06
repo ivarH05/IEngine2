@@ -14,7 +14,7 @@ namespace IEngine
 	}
 	/* END OF TEMP */
 
-	GameObject::GameObject() : transform(Pointer<Transform>::Create())
+	GameObject::GameObject() : transform(new Transform())
 	{
 		_components.push_back(Pointer<Component>(transform));
 	}

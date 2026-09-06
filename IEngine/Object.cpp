@@ -1,8 +1,13 @@
 #include "Object.h"
+#include "Objectmanager.h"
 
-Object::Object() : _controlBlock(new PointerControlBlock<Object>(this)) { }
-
-Object::~Object()
+namespace IEngine
 {
-	_controlBlock->Disassemble();
+	Object::Object() : _controlBlock(nullptr), guid(ObjectManager::GenerateGUID()) {}
+
+	Object::~Object()
+	{
+		if (_controlBlock != nullptr)
+			_controlBlock->Disassemble();
+	}
 }
