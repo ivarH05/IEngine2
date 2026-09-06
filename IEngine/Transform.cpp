@@ -1,5 +1,6 @@
 #include "Transform.h"
 #include "Mathf.h"
+#include <iostream>
 
 namespace IEngine
 {
@@ -50,7 +51,7 @@ namespace IEngine
 
 	void Transform::SetParent(const Pointer<Transform> value)
 	{
-		if(value == this)
+		if (value == this)
 			throw std::invalid_argument("Cannot set parent to self.");
 
 		if (_parent == value)
@@ -132,7 +133,7 @@ namespace IEngine
 
 	Quaternion Transform::GetRotation()
 	{
-		if(!_rotationDirty)
+		if (!_rotationDirty)
 			return _rotation;
 
 		if (_parent == nullptr)
@@ -179,7 +180,7 @@ namespace IEngine
 
 		_localRotation = value;
 	}
-	
+
 	Vector3 Transform::GetEulerAngles()
 	{
 		Quaternion q = GetRotation();
@@ -209,7 +210,7 @@ namespace IEngine
 
 	Vector3 Transform::GetLossyScale()
 	{
-		if(!_lossyScaleDirty)
+		if (!_lossyScaleDirty)
 			return _lossyScale;
 
 		if (_parent == nullptr)
