@@ -41,6 +41,15 @@
     <ClCompile Include="Component.cpp">
       <Filter>Core\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="MeshRenderer.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Rendering\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Rendering\Data</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector3.h">
@@ -84,6 +93,15 @@
       <Filter>Core\Runtime</Filter>
     </ClInclude>
     <ClInclude Include="ObjectManager.h" />
+    <ClInclude Include="MeshRenderer.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Rendering\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Rendering\Data</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -112,6 +130,15 @@
     </Filter>
     <Filter Include="Core\Runtime">
       <UniqueIdentifier>{5dd6a238-ee03-47b2-afbe-3518dbe8cbd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components">
+      <UniqueIdentifier>{3600aee6-a7be-4692-bdb8-503cc07cc750}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering">
+      <UniqueIdentifier>{021633ad-70c3-40d4-92b4-784620e9d075}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Data">
+      <UniqueIdentifier>{05be713c-9e69-4747-b69f-4d2aa833bc9b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

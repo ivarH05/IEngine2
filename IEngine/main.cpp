@@ -3,6 +3,7 @@
 #include <iostream>
 #include "GameObject.h"
 #include "Transform.h"
+#include "MeshRenderer.h"
 #include "Pointer.h"
 #include "MonoBehaviourManager.h"
 
@@ -33,12 +34,20 @@ int main()
 
 	glViewport(0, 0, 800, 600);
 
+	Mesh* mesh = new Mesh();
+	Material* material = new Material();
+
 	Pointer<GameObject> object = new GameObject();
-	object->instantiate();
+	object->AddComponent<MeshRenderer>();
 	object->transform->name = "Object 0";
 
+	object->GetComponent<MeshRenderer>()->SetMaterial(material);
+	object->GetComponent<MeshRenderer>()->SetMesh(mesh);
+
 	Pointer<GameObject> object1 = new GameObject();
-	object1->instantiate();
+	object1->AddComponent<MeshRenderer>();
+	object1->GetComponent<MeshRenderer>()->SetMaterial(material);
+	object1->GetComponent<MeshRenderer>()->SetMesh(mesh);
 	object1->transform->name = "Object 1";
 	object1->transform->SetParent(object->transform);
 	object1->transform->SetLocalEulerAngles(Vector3(0.0f, 90.0f, 0.0f));
@@ -46,7 +55,9 @@ int main()
 	object1->transform->SetLocalScale(Vector3(0.5f, 0.5f, 0.5f));
 
 	Pointer<GameObject> object2 = new GameObject();
-	object2->instantiate("Engine/Rendering/Shaders/ExampleFragmentShader.glsl");
+	object2->AddComponent<MeshRenderer>();
+	object2->GetComponent<MeshRenderer>()->SetMaterial(material);
+	object2->GetComponent<MeshRenderer>()->SetMesh(mesh);
 	object2->transform->name = "Object 2";
 
 	Vector3 rot = Vector3::Zero();
@@ -69,9 +80,6 @@ int main()
 		MonoBehaviourManager::FixedUpdateComponents();
 		MonoBehaviourManager::RenderComponents();
 
-		object->OnRender();
-		object1->OnRender();
-		object2->OnRender();
 		glfwSwapBuffers(window);
 
 		float moveSpeed = 0.01f;

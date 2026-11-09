@@ -97,8 +97,10 @@ namespace IEngine
 	template <typename T>
 	void MonoBehaviourManager::RegisterRender(Pointer<T> monoBehaviour)
 	{
+		std::cout << "aaa";
 		if constexpr (requires(T & value) { value.OnRender(); })
 		{
+			std::cout << "bbb";
 			auto renderDelegate = [monoBehaviour]()
 				{
 					if (monoBehaviour->transform->IsActive() && monoBehaviour->IsEnabled())

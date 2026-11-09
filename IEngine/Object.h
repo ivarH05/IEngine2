@@ -14,5 +14,7 @@ namespace IEngine
 		const std::size_t guid;
 
 		PointerControlBlock<Object>* _controlBlock;
+
+		virtual void OnDestroy() {}
 	};
 }
