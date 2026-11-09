@@ -24,9 +24,9 @@ namespace IEngine
 			Connection& operator=(const Connection&) = delete;
 
 			Connection(Connection&& other) noexcept
-				: event(other.event), id(other.id)
+				: _event(other._event), _id(other._id)
 			{
-				other.event = nullptr;
+				other._event = nullptr;
 			}
 
 			Connection& operator=(Connection&& other) noexcept
@@ -34,9 +34,9 @@ namespace IEngine
 				if (this != &other)
 				{
 					Disconnect();
-					event = other.event;
-					id = other.id;
-					other.event = nullptr;
+					_event = other._event;
+					_id = other._id;
+					other._event = nullptr;
 				}
 				return *this;
 			}
@@ -48,10 +48,10 @@ namespace IEngine
 
 			void Disconnect()
 			{
-				if (event != nullptr)
+				if (_event != nullptr)
 				{
-					event->RemoveListener(id);
-					event = nullptr;
+					_event->RemoveListener(_id);
+					_event = nullptr;
 				}
 			}
 
@@ -62,18 +62,18 @@ namespace IEngine
 
 			explicit operator bool() const
 			{
-				return event != nullptr;
+				return _event != nullptr;
 			}
 
 		private:
 			friend class Event;
 
 			Connection(Event* event, ListenerID id)
-				: event(event), id(id)
+				: _event(event), _id(id)
 			{}
 
-			Event* event = nullptr;
-			ListenerID id = 0;
+			Event* _event = nullptr;
+			ListenerID _id = 0;
 		};
 
 		ListenerID AddListener(const Listener& listener)

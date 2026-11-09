@@ -7,6 +7,7 @@ namespace IEngine
 
 	Object::~Object()
 	{
+		OnDestroy();
 		if (_controlBlock != nullptr)
 			_controlBlock->Disassemble();
 	}
