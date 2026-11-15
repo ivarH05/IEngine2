@@ -2,19 +2,23 @@
 #include "Vector3.h"
 #include "Matrix4x4.h"
 #include "Quaternion.h"
-#include "Component.h"
+#include "MonoBehaviour.h"
 #include "Pointer.h"
 #include <vector>
+#include <string>
+#include <iostream>
 
 template <typename T>
 using Vector = std::vector<T>;
 
 namespace IEngine
 {
-    class Transform :
-		public Component
-    {
-    public:
+	class Transform :
+		public MonoBehaviour<Transform>
+	{
+	public:
+		std::string name = "GameObject";
+
 		void SetActive(bool value);
 		bool IsActive() const;
 
@@ -39,7 +43,6 @@ namespace IEngine
 		Matrix4x4 GetMatrix();
 		Matrix4x4 GetLocalMatrix();
 
-
 		Pointer<Transform> GetParent() const;
 		void SetParent(const Pointer<Transform> value);
 
@@ -49,11 +52,11 @@ namespace IEngine
 		Vector3 TransformPoint(const Vector3& point);
 		Vector3 InverseTransformPoint(const Vector3& point);
 
-    private:
+	private:
 		bool _isActive = true;
 		bool _isActiveInHierarchy = true;
 
-		Pointer<Transform> _parent;
+		Pointer<Transform> _parent = nullptr;
 		Vector<Pointer<Transform>> _children = Vector<Pointer<Transform>>();
 
 		Vector3 _position = Vector3(0.0f, 0.0f, 0.0f);
@@ -83,5 +86,5 @@ namespace IEngine
 
 		void MarkDirty(bool position, bool rotation, bool scale, bool includeSelf = false);
 		void SetActiveInHierarchy(bool value);
-    };
+	};
 }

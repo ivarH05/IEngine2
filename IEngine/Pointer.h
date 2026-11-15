@@ -2,66 +2,67 @@
 #include <type_traits>
 #include <string>
 #include "Object.h"
-
-template <typename T>
-class PointerControlBlock;
-
-template <typename T>
-struct Pointer 
+namespace IEngine
 {
-public:
-	Pointer();
-	Pointer(std::nullptr_t) noexcept : _controlBlock(nullptr) {}
-	Pointer<T>(const T* other);
-	Pointer<T>(const Pointer<T>& other);
-	Pointer<T>(Pointer<T>&& other);
+	template <typename T>
+	class PointerControlBlock;
 
-	template <typename U>
-		requires std::derived_from<U, T>
-	Pointer<T>(const U* other);
+	template <typename T>
+	struct Pointer
+	{
+	public:
+		Pointer();
+		Pointer(std::nullptr_t) noexcept : _controlBlock(nullptr) {}
+		Pointer<T>(T* other);
+		Pointer<T>(const Pointer<T>& other);
+		Pointer<T>(Pointer<T>&& other);
 
-	template <typename U>
-		requires std::derived_from<U, T>
-	Pointer<T>(const Pointer<U>& other);
+		template <typename U>
+			requires std::derived_from<U, T> && (!std::is_const_v<U>)
+		Pointer<T>(U* other);
 
-	template <typename U>
-		requires std::derived_from<U, T>
-	Pointer<T>(Pointer<U>&& other);
+		template <typename U>
+			requires std::derived_from<U, T>
+		Pointer<T>(const Pointer<U>& other);
 
-	~Pointer<T>();
+		template <typename U>
+			requires std::derived_from<U, T>
+		Pointer<T>(Pointer<U>&& other);
 
-	Pointer<T>& operator=(const Pointer<T>& other) noexcept;
-	Pointer<T>& operator=(Pointer<T>&& other) noexcept;
-	Pointer<T>& operator=(T* other) noexcept;
-	Pointer<T>& operator=(T other) noexcept;
+		~Pointer<T>();
 
-	static Pointer<T> Create();
-	inline PointerControlBlock<T>* GetControlBlock() const;
+		Pointer<T>& operator=(const Pointer<T>& other) noexcept;
+		Pointer<T>& operator=(Pointer<T>&& other) noexcept;
+		Pointer<T>& operator=(T* other) noexcept;
+		Pointer<T>& operator=(T other) noexcept;
 
-	explicit operator bool() const;
+		inline PointerControlBlock<T>* GetControlBlock() const;
 
-	T* operator->() const;
-	inline T* Get() const;
+		explicit operator bool() const;
 
-	bool operator==(const Pointer<T>& other) const noexcept;
-	bool operator!=(const Pointer<T>& other) const noexcept;
+		T* operator->() const;
+		inline T* Get() const;
 
-	bool operator==(const T* other) const noexcept;
-	bool operator!=(const T* other) const noexcept;
+		bool operator==(const Pointer<T>& other) const noexcept;
+		bool operator!=(const Pointer<T>& other) const noexcept;
 
-	bool operator==(std::nullptr_t) const noexcept;
-	bool operator!=(std::nullptr_t) const noexcept;
+		bool operator==(const T* other) const noexcept;
+		bool operator!=(const T* other) const noexcept;
 
-	std::string ToString() const;
+		bool operator==(std::nullptr_t) const noexcept;
+		bool operator!=(std::nullptr_t) const noexcept;
 
-private:
-	PointerControlBlock<T>* _controlBlock = nullptr;
+		std::string ToString() const;
 
-	inline bool ControlBlockExists() const;
-	inline bool TargetExists() const;
-	inline void LinkControlBlock();
-	inline void UnlinkControlBlock();
-	inline void SetControlBlock(PointerControlBlock<T>* newBlock);
-};
+	private:
+		PointerControlBlock<T>* _controlBlock = nullptr;
+
+		inline bool ControlBlockExists() const;
+		inline bool TargetExists() const;
+		inline void LinkControlBlock();
+		inline void UnlinkControlBlock();
+		inline void SetControlBlock(PointerControlBlock<T>* newBlock);
+	};
+}
 
 #include "Pointer.inl"

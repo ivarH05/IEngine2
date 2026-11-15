@@ -1,28 +1,28 @@
 #pragma once
 #include <type_traits>
 
-// forward decl
-template <typename T>
-struct Pointer;
-
-class Object;
-
-template <typename T>
-class PointerControlBlock 
+namespace IEngine
 {
-private:
-	friend Pointer<T>;
-	friend Object;
+	// forward decl
+	template <typename T>
+	struct Pointer;
 
-	PointerControlBlock(T* object);
-	~PointerControlBlock();
+	class Object;
 
-	void Disassemble();
-	void AddLink();
-	void RemoveLink();
+	template <typename T>
+	class PointerControlBlock
+	{
+	public:
+		PointerControlBlock(T* object);
+		~PointerControlBlock();
 
-	T* _target = nullptr;
-	int _linkCount = 0;
-};
+		void Disassemble();
+		void AddLink();
+		void RemoveLink();
+
+		T* _target = nullptr;
+		int _linkCount = 0;
+	};
+}
 
 #include "PointerControlBlock.inl"
