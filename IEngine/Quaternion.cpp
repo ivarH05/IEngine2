@@ -79,20 +79,25 @@ namespace IEngine
 
 	Vector3 Quaternion::EulerAngles() const
 	{
-		float sinr_cosp = 2 * (w * x + y * z);
-		float cosr_cosp = 1 - 2 * (x * x + y * y);
-		float pitch = Mathf::Atan2(sinr_cosp, cosr_cosp);
-
-		float sinp = 2 * (w * y - z * x);
-		float yaw;
-		if (Mathf::Abs(sinp) >= 1)
-			yaw = Mathf::CopySign(Mathf::PI / 2, sinp);
+		float sinPitch = 2 * (w * x - y * z);
+		float pitch;
+		if (Mathf::Abs(sinPitch) >= 1)
+			pitch = Mathf::CopySign(Mathf::PI / 2, sinPitch);
 		else
-			yaw = Mathf::Asin(sinp);
+			pitch = Mathf::Asin(sinPitch);
 
-		float siny_cosp = 2 * (w * z + x * y);
-		float cosy_cosp = 1 - 2 * (y * y + z * z);
-		float roll = Mathf::Atan2(siny_cosp, cosy_cosp);
+		float yaw;
+		float roll;
+		if (Mathf::Abs(Mathf::Cos(pitch)) > 1e-6f)
+		{
+			yaw = Mathf::Atan2(2 * (w * y + x * z), 1 - 2 * (x * x + y * y));
+			roll = Mathf::Atan2(2 * (w * z + x * y), 1 - 2 * (x * x + z * z));
+		}
+		else
+		{
+			yaw = Mathf::Atan2(2 * (w * y - x * z), 1 - 2 * (y * y + z * z));
+			roll = 0;
+		}
 
 		return Vector3(pitch, yaw, roll) * Mathf::Rad2Deg;
 	}
@@ -109,12 +114,10 @@ namespace IEngine
 		float sp = Mathf::Sin(yawRads * 0.5f);
 		float cy = Mathf::Cos(rollRads * 0.5f);
 		float sy = Mathf::Sin(rollRads * 0.5f);
-		return Quaternion(
-			cr * cp * cy + sr * sp * sy,
-			sr * cp * cy - cr * sp * sy,
-			cr * sp * cy + sr * cp * sy,
-			cr * cp * sy - sr * sp * cy
-		);
+		Quaternion pitchRotation(cr, sr, 0.0f, 0.0f);
+		Quaternion yawRotation(cp, 0.0f, sp, 0.0f);
+		Quaternion rollRotation(cy, 0.0f, 0.0f, sy);
+		return yawRotation * pitchRotation * rollRotation;
 	}
 
 	Matrix4x4 Quaternion::ToMatrix() const
